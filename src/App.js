@@ -8,21 +8,29 @@ import "./firebase";
 import { Provider } from "react-redux";
 import store from "./store.js";
 
+// React-router
+import { Router } from "react-router-dom";
+import createBrowserHistory from "history/createBrowserHistory";
+
 // Components
 import Navbar from "./components/Navbar/Navbar.jsx";
 
 import "./styles/dever-chat-theme.css";
 
+const history = createBrowserHistory();
+
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <div className="contain-all">
-          <Navbar />
-          <div className="page-wrap">
-            <Routes />
+        <Router history={history}>
+          <div className="contain-all">
+            <Navbar />
+            <div className="page-wrap">
+              <Routes />
+            </div>
           </div>
-        </div>
+        </Router>
       </Provider>
     );
   }
