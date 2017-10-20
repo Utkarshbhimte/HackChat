@@ -14,10 +14,6 @@ const AsyncHomepage = asyncComponent(() =>
 /* Use components to define routes */
 export default () => (
   <Router history={history}>
-    <div className="contain-all">
-      <div className="page-wrap">
-        <Route exact path="/" render={() => <AsyncHomepage />} />
-      </div>
-    </div>
+    <Route exact path="/" render={() => <AsyncHomepage />} />
   </Router>
 );
