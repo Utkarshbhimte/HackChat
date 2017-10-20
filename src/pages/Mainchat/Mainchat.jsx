@@ -1,8 +1,18 @@
 import React, { Component } from "react";
 
+// Redux
+import { connect } from "react-redux";
+
+// Utils
 import values from "lodash/values";
 
+// Firebase
+import { firestore } from "firebase";
+
+// Styles
 import "./Mainchat.css";
+
+const fs = firestore();
 
 const messages = {
   saddhj3b34323534: {
@@ -41,7 +51,8 @@ const messages = {
     timestamp: new Date()
   },
   dfsadasd8sadfs987a534: {
-    text: "sdkjmansdkbaksf,zhncskd,mznfxklw,sdbzfxkvj,mrsbndlvk.,sjdmzlcksndz cklsdnzSup!!",
+    text:
+      "sdkjmansdkbaksf,zhncskd,mznfxklw,sdbzfxkvj,mrsbndlvk.,sjdmzlcksndz cklsdnzSup!!",
     sender: { name: "me" },
     timestamp: new Date()
   },
@@ -67,7 +78,7 @@ const scrollTo = (element, to, duration) => {
   }, 10);
 };
 
-export default class Homepage extends Component {
+class Mainchat extends Component {
   constructor(props) {
     super(props);
 
@@ -84,6 +95,8 @@ export default class Homepage extends Component {
       this.setState({ scrolling: true })
     );
 
+    this._fetchMessages();
+
     // Add this to firebase listener
     //  this.setState({ scrolling: false });
 
@@ -92,6 +105,13 @@ export default class Homepage extends Component {
         // this.messageWrap.scrollTop = this.messageWrap.scrollHeight;
         scrollTo(this.messageWrap, this.messageWrap.scrollHeight, 300);
     }, 300);
+  };
+
+  _fetchMessages = async () => {
+    const doc = await fs.doc(`chatroom/main`).get();
+
+    if (doc.exist) console.table(await doc.data());
+    else console.log("does not exist");
   };
 
   renderMessage = (msg, i) => (
@@ -139,3 +159,7 @@ export default class Homepage extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ user, messages }) => ({ user, messages });
+
+export default connect(mapStateToProps)(Mainchat);
