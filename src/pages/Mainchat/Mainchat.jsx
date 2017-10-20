@@ -141,6 +141,10 @@ class Mainchat extends Component {
     this.refs.chatForm.reset();
   };
 
+  _checkForUser = () => {
+    if (!this.props.user.uid) this.props.history.push("/login");
+  };
+
   render() {
     return (
       <div className="main-chat-page">
@@ -152,6 +156,7 @@ class Mainchat extends Component {
             type="text"
             ref="chatInput"
             placeholder="Type your message here . . ."
+            onFocus={this._checkForUser}
           />
           <input type="submit" />
         </form>

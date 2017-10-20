@@ -29,7 +29,7 @@ export default history => async dispatch => {
     dispatch({ type: "FINALIZE_USER_DATA", data: user });
 
     // navigating to the "/"
-    // history.push("/");
+    history.push("/");
   } catch (error) {
     // Handle Errors here.
     var errorCode = error.code;
