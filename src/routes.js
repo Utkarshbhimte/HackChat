@@ -5,7 +5,7 @@ import { Redirect, Route, Router } from "react-router-dom";
 import asyncComponent from "./components/AsyncComponent";
 
 const AsyncHomepage = asyncComponent(() =>
-  import("./pages/Homepage/Homepage.jsx")
+  import("./pages/Mainchat/Mainchat.jsx")
 );
 
 /* Use components to define routes */
