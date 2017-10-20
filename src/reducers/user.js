@@ -1,13 +1,13 @@
-export default (user = {}, { type, newData }) => {
+export default (user = {}, { type, data, token }) => {
   switch (type) {
-    case "UPDATE_USER_DATA": {
-      const login_time = new Date().toISOString();
-      user = { ...user, ...newData };
-
-      localStorage.setItem("user_data", JSON.stringify(user));
-      localStorage.setItem("login_time", login_time);
-
-      return user;
+    case "ADD_USER_DATA": {
+      localStorage.setItem("user_data", JSON.stringify(data));
+      localStorage.setItem("token", JSON.stringify(token));
+      return { ...data, token };
+    }
+    case "FINALIZE_USER_DATA": {
+      localStorage.setItem("user_data", JSON.stringify(data));
+      return { ...data, token, updated: true };
     }
     case "DELETE_USER_DATA": {
       localStorage.removeItem("user_data");

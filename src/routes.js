@@ -16,12 +16,12 @@ export default () => [
   <Route
     key="/chat/main"
     path="/chat/main"
-    render={({ location }) => <AsyncMainChat location={location} />}
+    render={({ history }) => <AsyncMainChat history={history} />}
   />,
   <Route
     key="/login"
     exact
     path="/login"
-    render={({ location }) => <AsyncLogin location={location} />}
+    render={({ history }) => <AsyncLogin history={history} />}
   />
 ];
