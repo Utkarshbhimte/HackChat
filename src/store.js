@@ -16,7 +16,7 @@ const user = localStorage.getItem("user_data")
   : {};
 
 // create a object for deafult state
-const defaultState = { user : user || {}};
+const defaultState = { user: user || {}, messages: {} };
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(rootReducer, defaultState, enhancers);
