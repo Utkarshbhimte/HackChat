@@ -1,8 +1,8 @@
-export default (messages = {}, { type, newData }) => {
+export default (state = {}, { type, messages }) => {
   switch (type) {
     case "UPDATE_MESSAGES":
-      return newData;
+      return { ...state, ...messages };
     default:
-      return messages;
+      return state;
   }
 };

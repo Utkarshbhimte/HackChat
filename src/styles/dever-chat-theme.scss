@@ -2,12 +2,13 @@
 @import "functions.scss";
 @import "skeleton.scss";
 @import "fonts.scss";
-@import url("https://fonts.googleapis.com/css?family=Yantramanav:300,400,500,700");
+// @import url("https://fonts.googleapis.com/css?family=Yantramanav:300,400,500,700");
+@import url("https://fonts.googleapis.com/css?family=Cambay");
 
 html,
 body {
-  font-family: "Yantramanav", "Raleway", "HelveticaNeue", "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
+  font-family: "Cambay", "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
   max-width: 100vw;
   overflow-x: hidden;
   color: $text-primary;
@@ -19,7 +20,6 @@ body {
   .page-wrap {
     position: relative;
     height: calc(100vh - 6rem);
-    
   }
 }
 
