@@ -113,11 +113,11 @@ class Mainchat extends Component {
   renderMessage = (msg, i) => {
     const myMessage =
       this.props.user.uid && this.props.user.uid === msg.sender.uid;
-    if (msg.type && msg.announcement)
+    if (msg.type && msg.type === "announcement")
       return (
-        <div className="bar-msg">
+        <div key={i} className="bar-msg">
           <p>{msg.text}</p>
-          <span>- {msg.sender.name}</span>
+          <span>- {msg.sender.displayName}</span>
         </div>
       );
     else
@@ -129,11 +129,11 @@ class Mainchat extends Component {
       );
   };
 
-  _sendChat = e => {
-    e.preventDefault();
+  _sendChat = (e, type) => {
+    if (e) e.preventDefault();
     const messageText = this.refs.chatInput.value;
 
-    if (messageText !== "") this.props.sendMessage(messageText);
+    if (messageText !== "") this.props.sendMessage(messageText, type);
 
     this.refs.chatForm.reset();
   };
@@ -154,7 +154,11 @@ class Mainchat extends Component {
             <em className="stamp-chips">no messages yet</em>
           )}
         </div>
-        <form className="chat-input" ref="chatForm" onSubmit={this._sendChat}>
+        <form
+          className="chat-input"
+          ref="chatForm"
+          onSubmit={e => this._sendChat(e)}
+        >
           <input
             type="text"
             ref="chatInput"
@@ -162,6 +166,17 @@ class Mainchat extends Component {
             onFocus={this._checkForUser}
           />
           <input type="submit" />
+          {this.props.user &&
+            this.props.user.type === "admin" && (
+              <span
+                role="img"
+                aria-label="announcement"
+                className="plus-button"
+                onClick={() => this._sendChat(null, "announcement")}
+              >
+                📢
+              </span>
+            )}
         </form>
       </div>
     );
