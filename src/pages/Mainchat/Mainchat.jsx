@@ -2,6 +2,10 @@ import React, { Component } from "react";
 
 // Redux
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
+// Actions
+import * as chatAction from "../../actionCreators/chatActions.js";
 
 // Utils
 import values from "lodash/values";
@@ -95,49 +99,42 @@ class Mainchat extends Component {
       this.setState({ scrolling: true })
     );
 
-    this._fetchMessages();
-
-    // Add this to firebase listener
-    //  this.setState({ scrolling: false });
+    fs.doc(`/chatroom/main`).onSnapshot(async doc => {
+      this.setState({ scrolling: false });
+      this.props.updateMessages(doc && doc.data());
+    });
 
     setInterval(() => {
       if (!this.state.scrolling)
-        // this.messageWrap.scrollTop = this.messageWrap.scrollHeight;
         scrollTo(this.messageWrap, this.messageWrap.scrollHeight, 300);
     }, 300);
   };
 
-  _fetchMessages = async () => {
-    const doc = await fs.doc(`chatroom/main`).get();
-
-    if (doc.exist) console.table(await doc.data());
-    else console.log("does not exist");
+  renderMessage = (msg, i) => {
+    const myMessage =
+      this.props.user.uid && this.props.user.uid === msg.sender.uid;
+    if (msg.type && msg.announcement)
+      return (
+        <div className="bar-msg">
+          <p>{msg.text}</p>
+          <span>- {msg.sender.name}</span>
+        </div>
+      );
+    else
+      return (
+        <div key={i} className={`chat-snap ${!myMessage ? `recieved` : ``}`}>
+          {!myMessage && <strong>{msg.sender.displayName}</strong>}
+          <span>{msg.text}</span>
+        </div>
+      );
   };
-
-  renderMessage = (msg, i) => (
-    <div
-      key={i}
-      className={`chat-snap ${msg.sender.name !== "me" ? `recieved` : ``}`}
-    >
-      <strong>{msg.sender.name}</strong>
-      <span>{msg.text}</span>
-    </div>
-  );
 
   _sendChat = e => {
     e.preventDefault();
     const messageText = this.refs.chatInput.value;
-    const messages = { ...this.state.messages };
 
-    this.setState({ scrolling: false });
+    if (messageText !== "") this.props.sendMessage(messageText);
 
-    messages[new Date()] = {
-      text: messageText,
-      sender: { name: "me" },
-      timestamp: new Date()
-    };
-
-    this.setState({ messages });
     this.refs.chatForm.reset();
   };
 
@@ -146,10 +143,16 @@ class Mainchat extends Component {
   };
 
   render() {
+    const messages = this.props.messages;
     return (
       <div className="main-chat-page">
         <div ref="messageWrap" className="message-wrap">
-          {values(this.state.messages).map(this.renderMessage)}
+          {values(messages).length > 0 &&
+            values(messages).map(this.renderMessage)}
+
+          {values(messages).length === 0 && (
+            <em className="stamp-chips">no messages yet</em>
+          )}
         </div>
         <form className="chat-input" ref="chatForm" onSubmit={this._sendChat}>
           <input
@@ -167,4 +170,7 @@ class Mainchat extends Component {
 
 const mapStateToProps = ({ user, messages }) => ({ user, messages });
 
-export default connect(mapStateToProps)(Mainchat);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ ...chatAction }, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Mainchat);
