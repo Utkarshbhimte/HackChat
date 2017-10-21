@@ -1,11 +1,15 @@
 import { firestore } from "firebase";
 const fs = firestore();
 
-export const sendMessage = messageText => async (dispatch, getState) => {
+export const sendMessage = (messageText, type) => async (
+  dispatch,
+  getState
+) => {
   const { displayName, uid } = getState().user;
   const sentAt = Date.now();
   const messageBlock = {
     text: messageText,
+    type: type || 'chat',
     sender: { displayName, uid },
     sentAt
   };
